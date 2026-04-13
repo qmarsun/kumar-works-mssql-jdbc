@@ -279,6 +279,9 @@ public class SQLServerStatement implements ISQLServerStatement {
             
             try {
                 // (Re)execute this Statement with the new command
+                // Ensure session state matches the JDBC connection property before every execution.
+                connection.applySetNoCount();
+
                 executeCommand(newStmtCmd);
             } catch (SQLServerException e) {
                 SQLServerError sqlServerError = e.getSQLServerError();
