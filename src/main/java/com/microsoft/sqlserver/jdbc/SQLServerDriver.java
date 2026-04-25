@@ -644,7 +644,7 @@ enum SQLServerDriverStringProperty {
     PASSWORD("password", ""),
     RESPONSE_BUFFERING("responseBuffering", "adaptive"),
     SELECT_METHOD("selectMethod", "direct"),
-   ,
+   
     DOMAIN("domain", ""),
     SERVER_NAME("serverName", ""),
     // NEW

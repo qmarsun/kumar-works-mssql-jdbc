@@ -2655,21 +2655,23 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
             SQLServerPooledConnection pooledConnection) throws SQLServerException {
         try {
 
-        String sPropValueT = activeConnectionProperties.getProperty(
-        SQLServerDriverStringProperty.SET_NOCOUNT.toString());
-
-        if (null == sPropValueT) {
-            sPropValueT = SQLServerDriverStringProperty.SET_NOCOUNT.getDefaultValue();
-        }
-
-        setNoCount = OnOffOption.valueOfString(sPropValueT);
-        activeConnectionProperties.setProperty(
-                SQLServerDriverStringProperty.SET_NOCOUNT.toString(),
-                setNoCount.toString());
+          
 
             if (propsIn != null) {
 
                 activeConnectionProperties = (Properties) propsIn.clone();
+
+                String sPropValueT = activeConnectionProperties.getProperty(
+                        SQLServerDriverStringProperty.SET_NOCOUNT.toString());
+
+                    if (null == sPropValueT) {
+                        sPropValueT = SQLServerDriverStringProperty.SET_NOCOUNT.getDefaultValue();
+                    }
+
+                    setNoCount = OnOffOption.valueOfString(sPropValueT);
+                    activeConnectionProperties.setProperty(
+                            SQLServerDriverStringProperty.SET_NOCOUNT.toString(),
+                            setNoCount.toString());
 
                 pooledConnectionParent = pooledConnection; 
 
@@ -3787,8 +3789,9 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
             if (!state.equals(State.OPENED) && !state.equals(State.CLOSED)) {
                 this.close();
             }
-
+            if( activeConnectionProperties != null) {
             activeConnectionProperties.remove(SQLServerDriverStringProperty.TRUST_STORE_PASSWORD.toString());
+            }
         }
         return this;
     }

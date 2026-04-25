@@ -284,3 +284,40 @@ docker run -e "ACCEPT_EULA=Y" `
 -p 1433:1433 `
 --name sqlserver `
 -d mcr.microsoft.com/mssql/server:2022-latest
+
+C:\Users\kmega>docker exec -it sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong(!)Password" -C
+
+C:\Users\kmega>
+docker exec -it sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong(!)Password" -C
+1> select @@servername
+2> go
+                                                                                                            
+c7d46bb2855c                                                                                                            
+
+(1 rows affected)
+1>
+
+
+
+docker run -e "ACCEPT_EULA=Y" \
+          -e "MSSQL_SA_PASSWORD=YourStrong(!)Password" \
+          -p 1433:1433 \
+          --name sqlserver \
+          -v /path/to/data:/var/opt/mssql \
+          -d mcr.microsoft.com/mssql/server:2022-latest
+
+
+
+
+git config --global user.email "qmarsun22@gmail.com"
+git config --global user.name "qmarsun"
+
+
+
+
+C:\Users\kmega>docker port sqlserver
+1433/tcp -> 0.0.0.0:1433
+
+servername: localhost, 1433
+sa
+"YourStrong(!)Password" 
