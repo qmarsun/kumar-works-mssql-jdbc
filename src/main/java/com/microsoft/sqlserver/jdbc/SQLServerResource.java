@@ -50,6 +50,7 @@ public final class SQLServerResource extends ListResourceBundle {
         {"R_invalidLength", "The length {0} is not valid."},
         {"R_unknownSSType", "Invalid SQL Server data type {0}."},
         {"R_unknownJDBCType", "Invalid JDBC data type {0}."},
+        {"R_set_nocountPropertyDescription", "Invalid set_nocount {0}."},
         {"R_notSQLServer", "The driver received an unexpected pre-login response. Verify the connection properties and check that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port. This driver can be used only with SQL Server 2005 or later."},
         {"R_tcpOpenFailed", "{0}. Verify the connection properties. Make sure that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port. Make sure that TCP connections to the port are not blocked by a firewall."},
         {"R_unsupportedServerVersion", "SQL Server version {0} is not supported by this driver."},

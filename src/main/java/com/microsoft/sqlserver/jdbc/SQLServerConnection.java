@@ -96,6 +96,14 @@ import mssql.googlecode.concurrentlinkedhashmap.EvictionListener;
  */
 public class SQLServerConnection implements ISQLServerConnection, java.io.Serializable {
 
+
+    private OnOffOption setNoCount = OnOffOption.OFF;
+
+    final OnOffOption getSetNoCount() {
+        return setNoCount;
+    }
+
+ 
     /**
      * Always refresh SerialVersionUID when prompted
      */
@@ -388,6 +396,7 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
         return (sanitized == null || sanitized.isEmpty()) ? "Unknown" : sanitized.substring(0, Math.min(sanitized.length(), maxLength));
     }
 
+   
     /**
      * Generate a 6 byte random array for netAddress
      * As per TDS spec this is a unique clientID (MAC address) used to identify the client.
@@ -828,6 +837,9 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
     final boolean useLastUpdateCount() {
         return lastUpdateCount;
     }
+
+
+   
 
     /**
      * Translates the serverName from Unicode to ASCII Compatible Encoding (ACE), as defined by the ToASCII operation of
@@ -2642,11 +2654,26 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
     Connection connectInternal(Properties propsIn,
             SQLServerPooledConnection pooledConnection) throws SQLServerException {
         try {
+
+          
+
             if (propsIn != null) {
 
                 activeConnectionProperties = (Properties) propsIn.clone();
 
-                pooledConnectionParent = pooledConnection;
+                String sPropValueT = activeConnectionProperties.getProperty(
+                        SQLServerDriverStringProperty.SET_NOCOUNT.toString());
+
+                    if (null == sPropValueT) {
+                        sPropValueT = SQLServerDriverStringProperty.SET_NOCOUNT.getDefaultValue();
+                    }
+
+                    setNoCount = OnOffOption.valueOfString(sPropValueT);
+                    activeConnectionProperties.setProperty(
+                            SQLServerDriverStringProperty.SET_NOCOUNT.toString(),
+                            setNoCount.toString());
+
+                pooledConnectionParent = pooledConnection; 
 
                 String trustStorePassword = activeConnectionProperties
                         .getProperty(SQLServerDriverStringProperty.TRUST_STORE_PASSWORD.toString());
@@ -2682,6 +2709,7 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
                 String sPropKey;
                 String sPropValue;
 
+                
                 sPropKey = SQLServerDriverStringProperty.USER.toString();
                 sPropValue = activeConnectionProperties.getProperty(sPropKey);
                 if (null == sPropValue) {
@@ -3761,8 +3789,9 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
             if (!state.equals(State.OPENED) && !state.equals(State.CLOSED)) {
                 this.close();
             }
-
+            if( activeConnectionProperties != null) {
             activeConnectionProperties.remove(SQLServerDriverStringProperty.TRUST_STORE_PASSWORD.toString());
+            }
         }
         return this;
     }
@@ -5195,6 +5224,11 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
         }
     }
 
+    
+    void applySetNoCount() throws SQLServerException {
+     connectionCommand("SET NOCOUNT " + setNoCount.toString(), "applySetNoCount");
+    }
+    
     /**
      * Build the syntax to initialize the connection at the database side.
      * 
@@ -9543,6 +9577,7 @@ public class SQLServerConnection implements ISQLServerConnection, java.io.Serial
  * 
  */
 final class SQLServerConnectionSecurityManager {
+
     static final String DLLNAME = SQLServerDriver.AUTH_DLL_NAME + ".dll";
     String serverName;
     int portNumber;

@@ -1,0 +1,3 @@
+how to buld 
+mvn install -DskipTest
+

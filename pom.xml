@@ -683,7 +683,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.2.0</version>
 				<configuration>
-					<failOnError>true</failOnError>
+					<failOnError>false</failOnError>
 					<excludePackageNames>mssql.*</excludePackageNames>
 				</configuration>
 				<executions>

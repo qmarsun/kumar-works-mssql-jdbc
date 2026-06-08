@@ -644,8 +644,11 @@ enum SQLServerDriverStringProperty {
     PASSWORD("password", ""),
     RESPONSE_BUFFERING("responseBuffering", "adaptive"),
     SELECT_METHOD("selectMethod", "direct"),
+   
     DOMAIN("domain", ""),
     SERVER_NAME("serverName", ""),
+    // NEW
+    SET_NOCOUNT("set_nocount", OnOffOption.OFF.toString()),
     IPADDRESS_PREFERENCE("iPAddressPreference", IPAddressPreference.IPV4_FIRST.toString()),
     SERVER_SPN("serverSpn", ""),
     REALM("realm", ""),
@@ -758,6 +761,7 @@ enum SQLServerDriverBooleanProperty {
     DISABLE_STATEMENT_POOLING("disableStatementPooling", true),
     INTEGRATED_SECURITY("integratedSecurity", false),
     LAST_UPDATE_COUNT("lastUpdateCount", true),
+    
     MULTI_SUBNET_FAILOVER("multiSubnetFailover", false),
     REPLICATION("replication", false),
     SERVER_NAME_AS_ACE("serverNameAsACE", false),
@@ -881,10 +885,16 @@ public final class SQLServerDriver implements java.sql.Driver {
     // }
     
     private static final String[] TRUE_FALSE = {"true", "false"};
+    private static final String[] ON_OFF = {OnOffOption.ON.toString(), OnOffOption.OFF.toString()};
 
     private static final SQLServerDriverPropertyInfo[] DRIVER_PROPERTIES = {
-            // default required available choices
-            // property name value property (if appropriate)
+           
+            new SQLServerDriverPropertyInfo(
+                SQLServerDriverStringProperty.SET_NOCOUNT.toString(),
+                SQLServerDriverStringProperty.SET_NOCOUNT.getDefaultValue(),
+                false,
+                ON_OFF
+            ),
             new SQLServerDriverPropertyInfo(SQLServerDriverStringProperty.APPLICATION_INTENT.toString(),
                     SQLServerDriverStringProperty.APPLICATION_INTENT.getDefaultValue(), false,
                     new String[] {ApplicationIntent.READ_ONLY.toString(), ApplicationIntent.READ_WRITE.toString()}),
